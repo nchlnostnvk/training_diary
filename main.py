@@ -1,49 +1,8 @@
-from training_data import WORKOUT_TYPES
-import random
+import training_data as td
 
 # Переменные для хранения тренировок и времени
 log = ""
 total_min = 0
-
-# Возвращает случайную мотивационную фразу
-def random_motivation():
-    random_number = random.randint(1, 4)
-
-    if random_number == 1:
-        return "Каждая тренировка приближает тебя к цели!"
-    elif random_number == 2:
-        return "Дисциплина важнее мотивации!"
-    elif random_number == 3:
-        return "Сегодня ты сильнее, чем вчера!"
-    else:
-        return "Не останавливайся на достигнутом!"
-
-
-# Показывает список доступных команд
-def show_help():
-    print("""
-Доступные команды:
-add <вид> <минуты> — добавить тренировку
-list — показать тренировки
-total — общее время тренировок
-motivate — мотивационная фраза
-help — показать справку
-exit — выход
-    """)
-
-
-# Добавляет тренировку в строку дневника
-def add_workout(log, kind, minutes):
-    if log:
-        log += ", "
-
-    log += kind + " — " + str(minutes) + " мин"
-    return log
-
-
-# Возвращает обновлённое общее время
-def total_minutes(current, minutes):
-    return current + minutes
 
 # Основной цикл программы
 while True:
@@ -54,10 +13,10 @@ while True:
         break
 
     elif command == "motivate":
-        print(random_motivation())
+        print(td.random_motivation())
 
     elif command == "help":
-        show_help()
+        td.show_help()
 
     elif command.startswith("add "):
         # Отделяем название тренировки от минут
@@ -87,15 +46,9 @@ while True:
             print("Количество минут должно быть больше нуля.")
             continue
 
-        # Проверяем допустимый вид тренировки
-        if exercise.lower() not in WORKOUT_TYPES.lower():
-            print("Неизвестный вид тренировки.")
-            print("Доступные виды:", WORKOUT_TYPES)
-            continue
-
         # Добавляем тренировку и обновляем время
-        log = add_workout(log, exercise, minutes)
-        total_min = total_minutes(total_min, minutes)
+        log = td.add_workout(log, exercise, minutes)
+        total_min = td.total_minutes(total_min, minutes)
 
         print(f"Тренировка {exercise} добавлена.")
 
