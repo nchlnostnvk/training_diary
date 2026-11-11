@@ -1,8 +1,9 @@
 import training_data as td
 
 # Переменные для хранения тренировок и времени
-log = ""
-total_min = 0
+log = []
+kinds = {}
+kinds_set = set()
 
 # Основной цикл программы
 while True:
@@ -48,15 +49,32 @@ while True:
 
         # Добавляем тренировку и обновляем время
         log = td.add_workout(log, exercise, minutes)
-        total_min = td.total_minutes(total_min, minutes)
+        kinds[exercise] = minutes
+        kinds_set = td.add_kind(kinds_set, exercise)
 
         print(f"Тренировка {exercise} добавлена.")
 
     elif command == "list":
-        print(log if log else "Дневник пуст.")
+        if log:
+            for kind, minutes in log:
+                print(f"{kind} - {minutes} минут")
+        else:
+            print("Дневник пуст.")
 
     elif command == "total":
-        print(f"Общее время: {total_min} минут")
+        print(f"Общее время: {td.total_minutes(log)} минут")
+
+    elif command == "kinds":
+        if kinds_set:
+            print(f"Виды тренировок: {kinds_set}")
+        else:
+            print("Виды тренировок отсутствуют.")
+
+    elif command == "long":
+        print(f"Виды тренировок дольше 30 минут: {td.long_workouts(kinds)}")
+
+    elif command == "upper":
+        print(td.upper_kinds(kinds))
 
     else:
         print("Неизвестная команда.")
